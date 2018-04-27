@@ -43,7 +43,7 @@ redis-cli -c
 cluster meet 172.21.129.63 6380
 // 查看集群节点
 cluster nodes
-// 退出redis client，执行每个节点下的slots.sh分配批量分配hash slot（请根据实际节点数修改每个节点的slot数量）
+// 退出redis client，执行每个节点下的slots.sh批量分配hash slot（请根据实际节点数修改每个节点的slot数量）
 /opt/app/redis-cluster/node6379/slots.sh
 /opt/app/redis-cluster/node6380/slots.sh
 // 进入redis client，确认集群是否正常
