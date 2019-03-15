@@ -1,4 +1,3 @@
-## 1. 准备工作
 ```
 # 查看磁盘空间
 df -h
@@ -37,7 +36,7 @@ iptables -P OUTPUT ACCEPT
 ## 允许所有访问21,22,80端口
 iptables -A INPUT -p tcp --dport 21 -j ACCEPT
 iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT            iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT
 ## 允许172.21网段访问（内网白名单）
 iptables -A INPUT -s 172.21.0.0/16 -j ACCEPT
 ## 允许127.0.0.1回环访问
