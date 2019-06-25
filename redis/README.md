@@ -120,6 +120,60 @@ protected-mode no
 sentinel auth-pass mymaster p@$$w0rd
 ```
 
+**redis开启启动**
+```
+touch /etc/rc.d/init.d/redis6379d
+chmod +x /etc/rc.d/init.d/redis6379d
+chkconfig redis6379d on
+vi /etc/rc.d/init.d/redis6379d
+
+
+#!/bin/sh
+# chkconfig:   2345 90 10
+# description:  Redis is a persistent key-value database
+#
+# Simple Redis init.d script conceived to work on Linux systems
+# as it does use of the /proc filesystem.
+
+REDISPORT=6379
+EXEC=/usr/local/bin/redis-server
+CLIEXEC=/usr/local/bin/redis-cli
+
+PIDFILE=/var/run/redis_${REDISPORT}.pid
+CONF="/opt/app/redis-cluster/redis-node${REDISPORT}/redis.conf"
+
+case "$1" in
+    start)
+        if [ -f $PIDFILE ]
+        then
+                echo "$PIDFILE exists, process is already running or crashed"
+        else
+                echo "Starting Redis server..."
+                $EXEC $CONF
+        fi
+        ;;
+    stop)
+        if [ ! -f $PIDFILE ]
+        then
+                echo "$PIDFILE does not exist, process is not running"
+        else
+                PID=$(cat $PIDFILE)
+                echo "Stopping ..."
+                $CLIEXEC -p $REDISPORT shutdown
+                while [ -x /proc/${PID} ]
+                do
+                    echo "Waiting for Redis to shutdown ..."
+                    sleep 1
+                done
+                echo "Redis stopped"
+        fi
+        ;;
+    *)
+        echo "Please use start or stop as first argument"
+        ;;
+esac
+```
+
 **常见问题**
 
 **其他**
