@@ -21,6 +21,9 @@ vi /etc/security/limits.d/90-nproc.conf
 *          soft    nproc     4096
 root       soft    nproc     unlimited
 
+# 关闭selinux
+vi /etc/sysconfig/selinux
+
 # 查看系统服务
 chkconfig --list
 # 启动/停止防火墙

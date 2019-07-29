@@ -11,10 +11,12 @@
  如果能访问外网但无法在线安装插件，可以进入Jenkins=>插件管理=>高级将升级站点由https改成http
  若无法访问网络则通过Jenkins=>插件管理=>高级离线上传，插件可以在http://updates.jenkins-ci.org/download/plugins/下载
 
- SSH
+ - Linux配置SSH公钥认证与Jenkins远程登录进行自动发布
  ```
-ssh-keygen -t rsa -P ''
-ssh-copy-id -i ~/.ssh/id_rsa.pub 用户名@机器IP
+ # Jenkins服务器上执行以下命令
+ ssh-keygen -t rsa -P ''
+ # 将公钥发给应用服务器
+ ssh-copy-id -i ~/.ssh/id_rsa.pub 用户名@机器IP
  ```
 
 **常用插件**
