@@ -1,4 +1,10 @@
 ```
+# 添加用户
+useradd cargo
+passwd cargo
+# 创建工作目录
+mkdir -p /app/cargo
+chown -R cargo:cargo /app/cargo
 # 查看磁盘空间
 df -h
 # 查看CPU信息
@@ -60,14 +66,21 @@ iptables -P OUTPUT ACCEPT
 iptables -A INPUT -p tcp --dport 21 -j ACCEPT
 iptables -A INPUT -p tcp --dport 22 -j ACCEPT
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
+iptables -A INPUT -p tcp --dport 7001 -j ACCEPT
 iptables -A INPUT -p tcp --dport 7003 -j ACCEPT
-## 允许172.28.20网段访问（内网白名单）
-iptables -A INPUT -s 172.28.20.0/24 -j ACCEPT
+## 允许172.28网段访问（内网白名单）
+iptables -A INPUT -s 172.28.0.0/16 -j ACCEPT
+## Maven私服?
+iptables -A INPUT -s 172.21.118.82 -j ACCEPT
 ## 允许127.0.0.1回环访问
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 ## 最后禁止其他未允许的规则访问
 iptables -P INPUT DROP
+
+## 保存访问规则
+service iptables save
 
 # 启动/停止FTP
 service vsftpd start
@@ -82,6 +95,13 @@ local_enable=YES
 user_config_dir=/etc/vsftpd/userconfig
 ## 在userconfig目录下以用户名作为文件名创建文件，并添加以下内容
 local_root=/var/ftp/user1/
+
+## 开启LINUX防火墙后, FTP PASV不能正常登录问题解决
+# 在vsftpd.conf配置中增加被动模式的端口范围
+pasv_min_port=10050
+pasv_max_port=10099
+# 防火墙放行被动模式的端口范围
+iptables -A INPUT -p tcp --dport 10050:10099 -j ACCEPT
 
 ## yum源不可用时，配置本地yum源
 
